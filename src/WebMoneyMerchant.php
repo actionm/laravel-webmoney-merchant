@@ -166,7 +166,7 @@ class WebMoneyMerchant
         $this->requiredOrderParamsCheck($order);
 
         /* WM Merchant accepts windows-1251; use only latin characters for the product name*/
-        $payment_fields = array();
+        $payment_fields = [];
         $payment_fields['LMI_PAYMENT_AMOUNT'] = $order['PAYMENT_AMOUNT'];
         $payment_fields['LMI_PAYMENT_NO'] = $order['PAYMENT_NO'];
         $payment_fields['LMI_PAYMENT_DESC_BASE64'] = $order['ITEM_NAME'];
