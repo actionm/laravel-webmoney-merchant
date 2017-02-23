@@ -340,7 +340,7 @@ class WebMoneyMerchant
      */
     public function payOrderFromGateOK()
     {
-        return "YES";
+        return 'YES';
     }
 
     /**
