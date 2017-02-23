@@ -4,7 +4,6 @@ namespace ActionM\WebMoneyMerchant;
 
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
-use ActionM\WebMoneyMerchant\Exceptions\InvalidConfiguration;
 
 class WebMoneyMerchantServiceProvider extends ServiceProvider
 {
@@ -22,7 +21,6 @@ class WebMoneyMerchantServiceProvider extends ServiceProvider
         ], 'views');
 
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'webmoney-merchant');
-
     }
 
     /**
