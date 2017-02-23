@@ -117,14 +117,16 @@ You must define callbacks in `config/webmoney-merchant.php` to search the order 
 
 The process scheme:
 
-1. The request comes from `merchant.webmoney.ru` `GET` `http://yourproject.com/webmoney/result` (with params).
-2. The function`ExampleController@payOrderFromGate` runs the validation process (auto-validation request params).
-3. The static function `searchOrderFilter` will be called (see `config/webmoney-merchant.php` `searchOrderFilter`) to search the order by the unique id.
-4. If the current order status is NOT `paid` in your database, the static function `paidOrderFilter` will be called (see `config/webmoney-merchant.php` `paidOrderFilter`).
+1. The request comes from `merchant.webmoney.ru` `GET` `http://yourproject.com/webmoney/result` to check if your website is available.
+2. The request comes from `merchant.webmoney.ru` `POST` `http://yourproject.com/webmoney/result` (with params).
+3. The function`ExampleController@payOrderFromGate` runs the validation process (auto-validation request params).
+4. The static function `searchOrderFilter` will be called (see `config/webmoney-merchant.php` `searchOrderFilter`) to search the order by the unique id.
+5. If the current order status is NOT `paid` in your database, the static function `paidOrderFilter` will be called (see `config/webmoney-merchant.php` `paidOrderFilter`).
 
 Add the route to `routes/web.php`:
 ``` php
- Route::get('/webmoney/result', 'ExampleController@payOrderFromGate');
+Route::post('/webmoney/result', 'ExampleController@payOrderFromGate');
+Route::get('/webmoney/result',  'ExampleController@payOrderFromGateOK');
 ```
 
 > **Note:**
@@ -192,6 +194,16 @@ class ExampleController extends Controller
     {
         return WebMoneyMerchant::payOrderFromGate($request);
     }
+    
+    /**
+    * Returns the service status for WebMoney Merchant request
+    */
+    public function payOrderFromGateOK()
+    {
+        return "YES";
+    }
+    
+}
 ```
 
 
