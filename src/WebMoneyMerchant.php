@@ -335,6 +335,14 @@ class WebMoneyMerchant
         return $callable($request, $order);
     }
 
+    /** Returns "YES"
+     * @return string
+     */
+    public function payOrderFromGateOK()
+    {
+        return "YES";
+    }
+
     /**
      * Runs WebMoneyMerchant::payOrderFromGate($request) when the request from WebMoney Merchant has been received.
      * @param Request $request
