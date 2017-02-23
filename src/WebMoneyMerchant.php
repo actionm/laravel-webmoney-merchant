@@ -340,7 +340,7 @@ class WebMoneyMerchant
      */
     public function payOrderFromGateOK()
     {
-        return "YES";
+        return 'YES';
     }
 
     /**
@@ -351,7 +351,7 @@ class WebMoneyMerchant
     public function payOrderFromGate(Request $request)
     {
         if (! $request->has('LMI_HASH')) {
-            return "OK";
+            return 'OK';
         }
 
         if ($request->has('LMI_PREREQUEST')) {
