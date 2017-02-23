@@ -3,8 +3,8 @@
 namespace ActionM\WebMoneyMerchant;
 
 use Illuminate\Http\Request;
-use ActionM\WebMoneyMerchant\Events\WebMoneyMerchantEvent;
 use Illuminate\Support\Facades\Validator;
+use ActionM\WebMoneyMerchant\Events\WebMoneyMerchantEvent;
 use ActionM\WebMoneyMerchant\Exceptions\InvalidConfiguration;
 
 class WebMoneyMerchant
@@ -21,7 +21,7 @@ class WebMoneyMerchant
     public function allowIP($ip)
     {
         // Allow local ip or any ip address
-        if ($ip == '127.0.0.1' || in_array('*',config('webmoney-merchant.allowed_ips'))) {
+        if ($ip == '127.0.0.1' || in_array('*', config('webmoney-merchant.allowed_ips'))) {
             return true;
         }
 
@@ -67,7 +67,7 @@ class WebMoneyMerchant
     }
 
     /**
-     * Calculate signature for the order form
+     * Calculate signature for the order form.
      * @param $LMI_PAYMENT_AMOUNT
      * @param $LMI_PAYMENT_NO
      * @return string
@@ -113,7 +113,7 @@ class WebMoneyMerchant
         $order = [
             'PAYMENT_AMOUNT' => $payment_amount,
             'PAYMENT_NO' => $payment_no,
-            'ITEM_NAME' => base64_encode($item_name)
+            'ITEM_NAME' => base64_encode($item_name),
         ];
 
         $this->requiredOrderParamsCheck($order);
@@ -141,7 +141,7 @@ class WebMoneyMerchant
         }
 
         // check if PAYMENT_NO is numeric
-        if (!is_numeric($order['PAYMENT_NO'])) {
+        if (! is_numeric($order['PAYMENT_NO'])) {
             throw InvalidConfiguration::generatePaymentFormOrderInvalidPaymentNo('PAYMENT_NO');
         }
 
@@ -150,7 +150,6 @@ class WebMoneyMerchant
             throw InvalidConfiguration::generatePaymentFormOrderInvalidPaymentNo($order['PAYMENT_NO']);
         }
     }
-
 
     /**
      * Generate html forms from view with payment buttons
@@ -167,14 +166,14 @@ class WebMoneyMerchant
         $this->requiredOrderParamsCheck($order);
 
         /* WM Merchant Accept windows-1251, use only latin characters for the product name*/
-        $payment_fields['LMI_PAYMENT_DESC_BASE64']= $order['ITEM_NAME'];
+        $payment_fields['LMI_PAYMENT_DESC_BASE64'] = $order['ITEM_NAME'];
 
-        $payment_fields['LMI_PAYEE_PURSE']=config('webmoney-merchant.WM_LMI_PAYEE_PURSE');
-        $payment_fields['LMI_PAYMENT_AMOUNT']=$order['PAYMENT_AMOUNT'];
-        $payment_fields['LMI_PAYMENT_NO']=$order['PAYMENT_NO'];
-        $payment_fields['LMI_PAYMENTFORM_SIGN']= $this->getFormSignature($payment_fields['LMI_PAYMENT_AMOUNT'], $payment_fields['LMI_PAYMENT_NO']);
+        $payment_fields['LMI_PAYEE_PURSE'] = config('webmoney-merchant.WM_LMI_PAYEE_PURSE');
+        $payment_fields['LMI_PAYMENT_AMOUNT'] = $order['PAYMENT_AMOUNT'];
+        $payment_fields['LMI_PAYMENT_NO'] = $order['PAYMENT_NO'];
+        $payment_fields['LMI_PAYMENTFORM_SIGN'] = $this->getFormSignature($payment_fields['LMI_PAYMENT_AMOUNT'], $payment_fields['LMI_PAYMENT_NO']);
 
-        $payment_fields['LOCALE']=config('webmoney-merchant.locale');
+        $payment_fields['LOCALE'] = config('webmoney-merchant.locale');
 
         return view('webmoney-merchant::payment_form', compact('payment_fields'));
     }
@@ -192,11 +191,10 @@ class WebMoneyMerchant
             'LMI_PAYMENT_NO' => 'required',
             'LMI_PAYER_IP' => 'required',
             'LMI_HASH' => 'required',
-            'LMI_HASH2' => 'required'
+            'LMI_HASH2' => 'required',
         ]);
 
         if ($validator->fails()) {
-
             return false;
         }
 
@@ -210,7 +208,7 @@ class WebMoneyMerchant
      */
     public function validatePayeePurse(Request $request)
     {
-        if ($request->get('LMI_PAYEE_PURSE') != config('webmoney-merchant.WM_LMI_PAYEE_PURSE') ) {
+        if ($request->get('LMI_PAYEE_PURSE') != config('webmoney-merchant.WM_LMI_PAYEE_PURSE')) {
             return false;
         }
 
@@ -227,7 +225,6 @@ class WebMoneyMerchant
         $sign = $this->getSignature($request);
 
         if (mb_strtoupper($request->get('LMI_HASH')) != mb_strtoupper($sign)) {
-
             return false;
         }
 
@@ -346,12 +343,12 @@ class WebMoneyMerchant
      */
     public function payOrderFromGate(Request $request)
     {
-        if (!$request->has('LMI_HASH')) {
+        if (! $request->has('LMI_HASH')) {
             return $this->responseError('LMI_HASH not set');
         }
 
         if ($request->has('LMI_PREREQUEST')) {
-            return "YES";
+            return 'YES';
         }
 
         // Validate request params from WebMoney Merchant server.
@@ -365,7 +362,6 @@ class WebMoneyMerchant
         if (! $order) {
             return $this->responseError('searchOrderFilter');
         }
-
 
         // If method pay and current order status is paid
         // return success response and notify info

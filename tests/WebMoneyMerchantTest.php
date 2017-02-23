@@ -3,15 +3,13 @@
 namespace ActionM\WebMoneyMerchant\Test;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Notification as NotificationFacade;
-
-use ActionM\WebMoneyMerchant\Events\WebMoneyMerchantEvent;
-use ActionM\WebMoneyMerchant\WebMoneyMerchantNotifiable;
-use ActionM\WebMoneyMerchant\WebMoneyMerchantNotification;
-
 use ActionM\WebMoneyMerchant\Test\Dummy\Order;
+use ActionM\WebMoneyMerchant\WebMoneyMerchantNotifiable;
+use ActionM\WebMoneyMerchant\Events\WebMoneyMerchantEvent;
 use ActionM\WebMoneyMerchant\Test\Dummy\AnotherNotifiable;
+use ActionM\WebMoneyMerchant\WebMoneyMerchantNotification;
 use ActionM\WebMoneyMerchant\Test\Dummy\AnotherNotification;
+use Illuminate\Support\Facades\Notification as NotificationFacade;
 
 class WebMoneyMerchantTest extends TestCase
 {
@@ -41,7 +39,7 @@ class WebMoneyMerchantTest extends TestCase
      * @param bool $signature
      * @return Request
      */
-    protected function create_test_request( $signature = false)
+    protected function create_test_request($signature = false)
     {
         $params = [
             'LMI_PAYEE_PURSE' => '1',
@@ -54,7 +52,7 @@ class WebMoneyMerchantTest extends TestCase
             'LMI_PAYER_WM' => '1',
             'LMI_HASH' => '1',
             'LMI_HASH2' => '1',
-            'LMI_PAYER_IP' => '1'
+            'LMI_PAYER_IP' => '1',
         ];
 
         if ($signature === false) {
@@ -181,14 +179,14 @@ class WebMoneyMerchantTest extends TestCase
     /** @test */
     public function generate_order_validation_true()
     {
-        $this->assertArrayHasKey('PAYMENT_AMOUNT', $this->webmoneymerchant->generateWebMoneyMerchantOrderWithRequiredFields('999', '12345',  'Item name'));
+        $this->assertArrayHasKey('PAYMENT_AMOUNT', $this->webmoneymerchant->generateWebMoneyMerchantOrderWithRequiredFields('999', '12345', 'Item name'));
     }
 
     /** @test */
     public function generate_order_true_validation_false()
     {
         $this->expectException('ActionM\WebMoneyMerchant\Exceptions\InvalidConfiguration');
-        $this->webmoneymerchant->generateWebMoneyMerchantOrderWithRequiredFields('', '',  'Item name');
+        $this->webmoneymerchant->generateWebMoneyMerchantOrderWithRequiredFields('', '', 'Item name');
     }
 
     /** @test */
@@ -313,17 +311,18 @@ class WebMoneyMerchantTest extends TestCase
         $this->app['config']->set('webmoney-merchant.searchOrderFilter', [Order::class, 'SearchOrderFilterPaidforPayOrderFromGate']);
         $request = $this->create_test_request();
 
-        $request['LMI_PREREQUEST']='1';
+        $request['LMI_PREREQUEST'] = '1';
         $request->server->set('REMOTE_ADDR', '127.0.0.1');
 
-        $this->assertEquals('YES',$this->webmoneymerchant->payOrderFromGate($request));
+        $this->assertEquals('YES', $this->webmoneymerchant->payOrderFromGate($request));
     }
+
     /** @test */
     public function payOrderFromGate_method_pay_SearchOrderFilterAlreadyPaid()
     {
         $this->app['config']->set('webmoney-merchant.searchOrderFilter', [Order::class, 'SearchOrderFilterPaidforPayOrderFromGate']);
         $this->app['config']->set('webmoney-merchant.paidOrderFilter', [Order::class, 'PaidOrderFilter']);
-        $this->app['config']->set('webmoney-merchant.WM_LMI_PAYEE_PURSE','1');
+        $this->app['config']->set('webmoney-merchant.WM_LMI_PAYEE_PURSE', '1');
 
         $request = $this->create_test_request();
         $request->server->set('REMOTE_ADDR', '127.0.0.1');
@@ -340,12 +339,12 @@ class WebMoneyMerchantTest extends TestCase
     {
         $this->app['config']->set('webmoney-merchant.searchOrderFilter', [Order::class, 'SearchOrderFilterNotPaid']);
         $this->app['config']->set('webmoney-merchant.paidOrderFilter', [Order::class, 'PaidOrderFilter']);
-        $this->app['config']->set('webmoney-merchant.WM_LMI_PAYEE_PURSE','1');
+        $this->app['config']->set('webmoney-merchant.WM_LMI_PAYEE_PURSE', '1');
 
         $request = $this->create_test_request();
         $request->server->set('REMOTE_ADDR', '127.0.0.1');
 
-        $this->assertEquals('YES',$this->webmoneymerchant->payOrderFromGate($request));
+        $this->assertEquals('YES', $this->webmoneymerchant->payOrderFromGate($request));
 
         NotificationFacade::assertSentTo(new WebMoneyMerchantNotifiable(), WebMoneyMerchantNotification::class);
     }

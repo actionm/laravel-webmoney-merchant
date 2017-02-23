@@ -3,8 +3,8 @@
 namespace ActionM\WebMoneyMerchant\Test;
 
 use ActionM\WebMoneyMerchant\WebMoneyMerchant;
-use ActionM\WebMoneyMerchant\WebMoneyMerchantServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
+use ActionM\WebMoneyMerchant\WebMoneyMerchantServiceProvider;
 use Illuminate\Support\Facades\Notification as NotificationFacade;
 
 class TestCase extends Orchestra
@@ -21,7 +21,6 @@ class TestCase extends Orchestra
         $this->app['config']->set('webmoney-merchant.WM_LMI_PAYEE_PURSE', 'Z1234567890');
         $this->app['config']->set('webmoney-merchant.WM_LMI_SECRET_X20', 'secret_key_X20');
         $this->app['config']->set('webmoney-merchant.WM_LMI_SECRET_KEY', 'secret_key');
-
     }
 
     protected function getPackageProviders($app)

@@ -54,7 +54,7 @@ return [
 
     // Allowed ip's
     'allowed_ips' => [
-        '*'
+        '*',
     ],
 
     /*

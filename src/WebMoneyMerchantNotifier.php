@@ -2,8 +2,8 @@
 
 namespace ActionM\WebMoneyMerchant;
 
-use ActionM\WebMoneyMerchant\Events\WebMoneyMerchantEvent;
 use Illuminate\Contracts\Events\Dispatcher;
+use ActionM\WebMoneyMerchant\Events\WebMoneyMerchantEvent;
 use ActionM\WebMoneyMerchant\Exceptions\InvalidConfiguration;
 
 class WebMoneyMerchantNotifier

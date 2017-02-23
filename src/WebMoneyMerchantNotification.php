@@ -3,12 +3,12 @@
 namespace ActionM\WebMoneyMerchant;
 
 use Illuminate\Bus\Queueable;
-use ActionM\WebMoneyMerchant\Events\WebMoneyMerchantEvent;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Messages\SlackAttachment;
+use ActionM\WebMoneyMerchant\Events\WebMoneyMerchantEvent;
 
 class WebMoneyMerchantNotification extends Notification implements ShouldQueue
 {
