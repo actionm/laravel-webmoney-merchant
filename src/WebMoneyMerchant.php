@@ -335,6 +335,14 @@ class WebMoneyMerchant
         return $callable($request, $order);
     }
 
+    /** Returns "YES"
+     * @return string
+     */
+    public function payOrderFromGateOK()
+    {
+        return "YES";
+    }
+
     /**
      * Runs WebMoneyMerchant::payOrderFromGate($request) when the request from WebMoney Merchant has been received.
      * @param Request $request
@@ -343,7 +351,7 @@ class WebMoneyMerchant
     public function payOrderFromGate(Request $request)
     {
         if (! $request->has('LMI_HASH')) {
-            return $this->responseError('LMI_HASH not set');
+            return "OK";
         }
 
         if ($request->has('LMI_PREREQUEST')) {
@@ -352,6 +360,8 @@ class WebMoneyMerchant
 
         // Validates the request params from the WebMoney Merchant server.
         if (! $this->validateOrderRequestFromGate($request)) {
+            $this->eventFillAndSend('webmoneymerchant.error', 'validateOrderRequestFromGate', $request);
+
             return $this->responseError('validateOrderRequestFromGate');
         }
 
@@ -359,6 +369,8 @@ class WebMoneyMerchant
         $order = $this->callFilterSearchOrder($request);
 
         if (! $order) {
+            $this->eventFillAndSend('webmoneymerchant.error', 'searchOrderFilter', $request);
+
             return $this->responseError('searchOrderFilter');
         }
 
