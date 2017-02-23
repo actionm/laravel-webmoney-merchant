@@ -14,13 +14,13 @@ class WebMoneyMerchant
     }
 
     /**
-     * Allow access, if the ip address is in the whitelist.
+     * Allow the access, if the ip address is in the whitelist.
      * @param $ip
      * @return bool
      */
     public function allowIP($ip)
     {
-        // Allow local ip or any ip address
+        // Allow the local ip or any other ip address
         if ($ip == '127.0.0.1' || in_array('*', config('webmoney-merchant.allowed_ips'))) {
             return true;
         }
@@ -29,7 +29,7 @@ class WebMoneyMerchant
     }
 
     /**
-     * Return 403 error code.
+     * Generates the '403' error code.
      * @param $message
      * @return mixed
      */
@@ -39,8 +39,8 @@ class WebMoneyMerchant
     }
 
     /**
-     * Return YES success message.
-     * @return mixed
+     * Returns the 'YES' success message.
+     * @return string
      */
     public function responseOK()
     {
@@ -48,7 +48,7 @@ class WebMoneyMerchant
     }
 
     /**
-     * Fill event details to pass the title and request params as array.
+     * Fills in the event details to pass the title and request params as array.
      * @param $event_type
      * @param $event_title
      * @param Request $request
@@ -67,7 +67,7 @@ class WebMoneyMerchant
     }
 
     /**
-     * Calculate signature for the order form.
+     * Calculates the signature for the order form.
      * @param $LMI_PAYMENT_AMOUNT
      * @param $LMI_PAYMENT_NO
      * @return string
@@ -80,7 +80,7 @@ class WebMoneyMerchant
     }
 
     /**
-     * Return hash for params from WebMoneyMerchant gate.
+     * Returns the hash for the params from WebMoneyMerchant.
      * @param Request $request
      * @return string
      */
@@ -102,7 +102,7 @@ class WebMoneyMerchant
     }
 
     /**
-     * Generate WebMoney order array with required array for order form.
+     * Generates the order array with required fields for the order form.
      * @param $payment_amount
      * @param $payment_no
      * @param $item_name
@@ -122,7 +122,7 @@ class WebMoneyMerchant
     }
 
     /**
-     * Check required order params for order form and raise an exception if fails.
+     * Checks required order params for the order form and raise an exception if it fails.
      * @param $order
      * @throws InvalidConfiguration
      */
@@ -140,19 +140,19 @@ class WebMoneyMerchant
             }
         }
 
-        // check if PAYMENT_NO is numeric
+        // Checks if PAYMENT_NO is numeric.
         if (! is_numeric($order['PAYMENT_NO'])) {
             throw InvalidConfiguration::generatePaymentFormOrderInvalidPaymentNo('PAYMENT_NO');
         }
 
-        // check if PAYMENT_NO > 0 and < 2147483647
+        // Checks if PAYMENT_NO > 0 and < 2147483647
         if (intval($order['PAYMENT_NO']) < 1 || intval($order['PAYMENT_NO']) > 2147483647) {
             throw InvalidConfiguration::generatePaymentFormOrderInvalidPaymentNo($order['PAYMENT_NO']);
         }
     }
 
     /**
-     * Generate html forms from view with payment buttons
+     * Generates html forms from view with payment buttons
      * Note: you can customise the view via artisan:publish.
      * @param $payment_amount
      * @param $payment_no
@@ -165,21 +165,20 @@ class WebMoneyMerchant
 
         $this->requiredOrderParamsCheck($order);
 
-        /* WM Merchant Accept windows-1251, use only latin characters for the product name*/
-        $payment_fields['LMI_PAYMENT_DESC_BASE64'] = $order['ITEM_NAME'];
-
-        $payment_fields['LMI_PAYEE_PURSE'] = config('webmoney-merchant.WM_LMI_PAYEE_PURSE');
+        /* WM Merchant accepts windows-1251; use only latin characters for the product name*/
+        $payment_fields = array();
         $payment_fields['LMI_PAYMENT_AMOUNT'] = $order['PAYMENT_AMOUNT'];
         $payment_fields['LMI_PAYMENT_NO'] = $order['PAYMENT_NO'];
-        $payment_fields['LMI_PAYMENTFORM_SIGN'] = $this->getFormSignature($payment_fields['LMI_PAYMENT_AMOUNT'], $payment_fields['LMI_PAYMENT_NO']);
-
+        $payment_fields['LMI_PAYMENT_DESC_BASE64'] = $order['ITEM_NAME'];
         $payment_fields['LOCALE'] = config('webmoney-merchant.locale');
+        $payment_fields['LMI_PAYEE_PURSE'] = config('webmoney-merchant.WM_LMI_PAYEE_PURSE');
+        $payment_fields['LMI_PAYMENTFORM_SIGN'] = $this->getFormSignature($payment_fields['LMI_PAYMENT_AMOUNT'], $payment_fields['LMI_PAYMENT_NO']);
 
         return view('webmoney-merchant::payment_form', compact('payment_fields'));
     }
 
     /**
-     * Validate request params from WebMoneyMerchant gate.
+     * Validates the request params from WebMoneyMerchant.
      * @param Request $request
      * @return bool
      */
@@ -202,7 +201,7 @@ class WebMoneyMerchant
     }
 
     /**
-     * Validate the payee purse from WebMoneyMerchant gate.
+     * Validates the payee purse from WebMoneyMerchant.
      * @param Request $request
      * @return bool
      */
@@ -216,7 +215,7 @@ class WebMoneyMerchant
     }
 
     /**
-     * Validate request signature from WebMoneyMerchant gate.
+     * Validates the request signature from WebMoneyMerchant.
      * @param Request $request
      * @return bool
      */
@@ -232,7 +231,7 @@ class WebMoneyMerchant
     }
 
     /**
-     * Validate ip, request params and signature from WebMoneyMerchant gate.
+     * Validates the allowed ip, request params and signature from WebMoneyMerchant.
      * @param Request $request
      * @return bool
      */
@@ -248,7 +247,7 @@ class WebMoneyMerchant
     }
 
     /**
-     * Validate the required attributes of the found order.
+     * Validates the required attributes of the found order.
      * @param Request $request
      * @param $order
      * @return bool
@@ -261,7 +260,7 @@ class WebMoneyMerchant
             return false;
         }
 
-        // check required found order attributes
+        // Checks required found order attributes.
         $attr = ['WEBMONEY_orderStatus', 'WEBMONEY_orderSum'];
 
         foreach ($attr as $k => $value) {
@@ -272,7 +271,7 @@ class WebMoneyMerchant
             }
         }
 
-        // compare order attributes vs request params
+        // Compares order attributes with request params.
         if ($order->getAttribute('WEBMONEY_orderSum') != $request->input('LMI_PAYMENT_AMOUNT')) {
             $this->eventFillAndSend('webmoneymerchant.error', $value.'Invalid', $request);
 
@@ -283,7 +282,7 @@ class WebMoneyMerchant
     }
 
     /**
-     * Call SearchOrderFilter and check return order params.
+     * Calls SearchOrderFilter and check return order params.
      * @param Request $request
      * @return bool
      * @throws InvalidConfiguration
@@ -298,8 +297,8 @@ class WebMoneyMerchant
 
         /*
          *  SearchOrderFilter
-         *  Search order in the database and return order details
-         *  Must return array with:
+         *  Searches the order in the database and return the order details.
+         *  Must return the array with:
          *
          *  orderStatus
          *  orderSum
@@ -315,7 +314,7 @@ class WebMoneyMerchant
     }
 
     /**
-     * Call PaidOrderFilter if order not paid.
+     * Calls PaidOrderFilter if the order is not paid.
      * @param Request $request
      * @param $order
      * @return mixed
@@ -329,17 +328,17 @@ class WebMoneyMerchant
             throw InvalidConfiguration::orderPaidFilterInvalid();
         }
 
-        // unset the custom order attributes for Eloquent support
+        // Unset the custom order attributes; for Eloquent support.
         unset($order['WEBMONEY_orderSum'], $order['WEBMONEY_orderStatus']);
 
-        // Run PaidOrderFilter callback
+        // Runs the `PaidOrderFilter` callback.
         return $callable($request, $order);
     }
 
     /**
-     * Run WebMoneyMerchant::payOrderFromGate($request) when receive request from WebMoney Merchant gate.
+     * Runs WebMoneyMerchant::payOrderFromGate($request) when the request from WebMoney Merchant has been received.
      * @param Request $request
-     * @return bool
+     * @return mixed
      */
     public function payOrderFromGate(Request $request)
     {
@@ -351,39 +350,39 @@ class WebMoneyMerchant
             return 'YES';
         }
 
-        // Validate request params from WebMoney Merchant server.
+        // Validates the request params from the WebMoney Merchant server.
         if (! $this->validateOrderRequestFromGate($request)) {
             return $this->responseError('validateOrderRequestFromGate');
         }
 
-        // Search and return order
+        // Searches and returns the order
         $order = $this->callFilterSearchOrder($request);
 
         if (! $order) {
             return $this->responseError('searchOrderFilter');
         }
 
-        // If method pay and current order status is paid
-        // return success response and notify info
+        // If the current order status is `paid`.
+        // Sends the notification and returns the success response.
         if (mb_strtolower($order->WEBMONEY_orderStatus) === 'paid') {
             $this->eventFillAndSend('webmoneymerchant.info', 'The order is already paid', $request);
 
             return $this->responseError('The order is already paid');
         }
 
-        // Current order is paid in WebMoney Merchant and not paid in database
+        // The current order is paid on WebMoney Merchant and not paid in the database.
 
         $this->eventFillAndSend('webmoneymerchant.success', 'paid order', $request);
 
-        // PaidOrderFilter - update order into DB as paid & other actions
-        // if return false then error
+        // PaidOrderFilter - update the order into the DB as paid & other actions.
+        // If it returns false, then some error has occurred.
         if (! $this->callFilterPaidOrder($request, $order)) {
             $this->eventFillAndSend('webmoneymerchant.error', 'callFilterPaidOrder', $request);
 
             return $this->responseError('callFilterPaidOrder');
         }
 
-        // Order is paid in WebMoney Merchant and updated in database
+        // The order is paid on WebMoney Merchant and updated in the database.
         return $this->responseOK();
     }
 }

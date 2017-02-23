@@ -22,14 +22,14 @@ return [
     'WM_LMI_SECRET_KEY' => env('WM_LMI_SECRET_KEY', ''),
 
     /*
-     * locale for payment form
+     * Locale for the payment form
      */
     'locale' => 'ru-RU',  // ru-RU || en-US
 
     /*
      *  SearchOrderFilter
-     *  Search order in the database and return order details
-     *  Must return array with:
+     *  Searches the order in the database and returns order details
+     *  Must return the array with:
      *
      *  orderStatus
      *  orderCurrency
@@ -39,8 +39,8 @@ return [
 
     /*
      *  PaidOrderFilter
-     *  If current orderStatus from DB != paid then call PaidOrderFilter
-     *  update order into DB & other actions
+     *  If current 'orderStatus' from DB != 'paid' then PaidOrderFilter will be called
+     *  Update the order into the DB & other actions
      */
     'paidOrderFilter' => null, //  'App\Http\Controllers\ExampleController::paidOrderFilter',
 
@@ -58,7 +58,7 @@ return [
     ],
 
     /*
-     * The notification that will be send when payment request received.
+     * The notification that will be sent after the payment request has been received.
      */
     'notification' => \ActionM\WebMoneyMerchant\WebMoneyMerchantNotification::class,
 
@@ -70,9 +70,9 @@ return [
     'notifiable' => \ActionM\WebMoneyMerchant\WebMoneyMerchantNotifiable::class,
 
     /*
-     * By default notifications are sent always. You can pass a callable to filter
+     * By default notifications are always sent. You can pass a callable to filter
      * out certain notifications. The given callable will receive the notification. If the callable
-     * return false, the notification will not be sent.
+     * returns false, the notification will not be sent.
      */
     'notificationFilter' => null,
 

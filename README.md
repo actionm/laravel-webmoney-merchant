@@ -1,4 +1,4 @@
-# Laravel payment processor package for WebMoney Merchant gateway
+# Laravel payment processor package for WebMoney Merchant
 
 [![Latest Stable Version](https://poser.pugx.org/actionm/laravel-webmoney-merchant/v/stable)](https://packagist.org/packages/actionm/laravel-webmoney-merchant)
 [![Build Status](https://img.shields.io/travis/actionm/laravel-webmoney-merchant/master.svg?style=flat-square)](https://travis-ci.org/actionm/laravel-webmoney-merchant)
@@ -66,9 +66,9 @@ Once you have published the configuration files, please edit the config file in 
   - Secret Key;
   - Secret Key X20;
   - Result URL;
-  - Control sign forming method = SHA256; 
-  - Necessarily require signature payment form = ON; 
-  - Process payments with unique only lmi_payment_no = ON;
+  - Control sign forming method = `SHA256`; 
+  - Necessarily require signature payment form = `ON`; 
+  - Process payments with unique only lmi_payment_no = `ON`;
 
 - After the configuration has been published, edit `config/webmoney-merchant.php`
 - Copy the `Secret Key X20` and `Secret Key` params and paste into `config/webmoney-merchant.php`
