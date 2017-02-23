@@ -23,7 +23,6 @@ class WebMoneyMerchantServiceProvider extends ServiceProvider
 
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'webmoney-merchant');
 
-        $this->testingEnv();
     }
 
     /**
@@ -42,26 +41,5 @@ class WebMoneyMerchantServiceProvider extends ServiceProvider
         $this->app->alias('webmoneymerchant', 'WebMoneyMerchant');
 
         $this->app->singleton(WebMoneyMerchantNotifier::class);
-    }
-
-    /**
-     * Not check config if testing env.
-     * @throws InvalidConfiguration
-     */
-    public function testingEnv()
-    {
-        if (! App::environment('testing')) {
-            $callable = config('webmoney-merchant.searchOrderFilter');
-
-            if (! is_callable($callable)) {
-                throw InvalidConfiguration::searchOrderFilterInvalid();
-            }
-
-            $callable = config('webmoney-merchant.paidOrderFilter');
-
-            if (! is_callable($callable)) {
-                throw InvalidConfiguration::orderPaidFilterInvalid();
-            }
-        }
     }
 }
