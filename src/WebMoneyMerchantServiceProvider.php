@@ -2,7 +2,6 @@
 
 namespace ActionM\WebMoneyMerchant;
 
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
 
 class WebMoneyMerchantServiceProvider extends ServiceProvider
