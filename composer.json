@@ -46,7 +46,7 @@
                 "ActionM\\WebMoneyMerchant\\WebMoneyMerchantServiceProvider"
             ],
             "aliases": {
-                "WebMoneyMerchant": " ActionM\\WebMoneyMerchant\\Facades\\WebMoneyMerchant"
+                "WebMoneyMerchant": "ActionM\\WebMoneyMerchant\\Facades\\WebMoneyMerchant"
             }
         }
     }
