@@ -39,5 +39,15 @@
     },
     "config": {
         "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "ActionM\\WebMoneyMerchant\\WebMoneyMerchantServiceProvider"
+            ],
+            "aliases": {
+                "WebMoneyMerchant": " ActionM\\WebMoneyMerchant\\Facades\\WebMoneyMerchant"
+            }
+        }
     }
 }
