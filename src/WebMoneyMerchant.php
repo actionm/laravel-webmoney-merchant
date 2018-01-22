@@ -342,12 +342,13 @@ class WebMoneyMerchant
      */
     public function payOrderFromGate(Request $request)
     {
-        if (! $request->has('LMI_HASH')) {
-            return 'OK';
-        }
 
         if ($request->has('LMI_PREREQUEST')) {
             return 'YES';
+        }
+
+        if (! $request->has('LMI_HASH')) {
+            return 'OK';
         }
 
         // Validates the request params from the WebMoney Merchant server.
